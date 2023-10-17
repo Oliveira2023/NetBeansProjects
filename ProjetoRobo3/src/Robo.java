@@ -45,8 +45,8 @@ public class Robo extends RoboIdeia {
     public Robo(String nome, float peso){
     super.posicaoX = 50;
     super.posicaoY = 50;
-    super.nome = "R-ATM";
-    super.peso = 70;
+    super.nome = nome;
+    super.peso = peso;
     }
     /**
      * outro construtor da classe robô, passando os valores da posição x e y.
@@ -72,7 +72,36 @@ public class Robo extends RoboIdeia {
     super.nome = nome;
     super.peso = peso;
     }
-    
+    @Override
+    public void move(float posX, float posY){
+        if (Float.isNaN(posX) || Float.isNaN(posY) || Float.isInfinite(posX) || Float.isInfinite(posY)){
+            throw new IllegalArgumentException("Args não válidos");
+        }
+        super.posicaoX = posX;
+        super.posicaoY = posY;
+    }
+    /**
+     * posY valor da posição Y inicial do robô.
+     * @param dist distância a partir da posiçaõ atual no eixo x que será movido o robô.
+     * @throws IllegalArgumentException exceção lançada quando o argumento for NaN ou infinito
+     */
+    @Override
+    public void moveX(float dist){
+        if (Float.isNaN(dist)|| Float.isInfinite(dist)){
+            throw new IllegalArgumentException("Arg não válido");
+        }
+        super.posicaoX += dist;
+    }
+    /**
+     * Move o robô ao longo do eixo y;
+     * @param dist distância a partir da posição atual no  eixo y que será movido o robô.
+     */
+    @Override
+    public void moveY(float dist){
+        if (Float.isNaN(dist) || Float.isFinite(dist)){
+        }
+        super.posicaoY += dist;
+    }
     /**
      * Metodo que define a orientação do robô e também efetua o movimento na
      * direção da orientaçaõ que a tecl foi pressionada
@@ -102,7 +131,7 @@ public class Robo extends RoboIdeia {
     }
     public void movimentosAgendados(String... moves){
         for (String tecla: moves){
-            if (!tecla.equals("--move")){
+            if ((!tecla.equals("--move") && !tecla.equals("-m"))){
                 System.out.println("Tecla: " + tecla);
                 System.out.println("Descrição: " + descricaoDoMovimento(tecla.charAt(0)));
                 setOrientacao(tecla.charAt(0));
@@ -123,6 +152,29 @@ public class Robo extends RoboIdeia {
             return "";
         }
     }
+    public boolean avaliaPos(int posX, int posY){
+        posX = posX + largura/2;
+        posY = posY + altura/2;
+        if (posX < 40 || posX > 560 || posY < 30 || posY > 360) {
+            return false; // delimitação da fronteira da sala
+        }
+        if ((posX >= 170 && posX <= 430) && (posY >=240 && posY <= 400)) {
+            return false; // delimitção região operação máquinas
+        }
+        if ((posX >=0 && posX <=100) && (posY >=0 && posY <=200)){
+            return false; // delimitação região caixas livros
+        }
+        if ((posX >= 500 && posX <= 600) && (posY >= 0 && posY <=200)) {
+            return false; // delimitação região caixas impressoras
+        }
+        if ((posX >= 170 && posX <=430) && (posY >=0 && posY <= 90)){
+            return false; // delimitação região caixas com HDs
+        }
+        if ((posX >= 170 && posX <=430) && (posY >=120 && posY <= 200)){
+            return false; // delimitação região caixas com HDs
+        }
+        return true;
+    }
     public void printStatus(){
         System.out.println("---Info R-ATM---");
         System.out.println("Nome do Robô: " + nome);
@@ -134,36 +186,6 @@ public class Robo extends RoboIdeia {
         System.out.println("Posição Y do robô: " + posicaoY);
         System.out.println("-------------------------");
         
-    }
-    @Override
-    public void move(float posX, float posY){
-        if (Float.isNaN(posX) || Float.isNaN(posY) || Float.isInfinite(posX) || Float.isInfinite(posY)){
-            throw new IllegalArgumentException("Args não válidos");
-        }
-        super.posicaoX = posX;
-        super.posicaoY = posY;
-    }
-    /**
-     * Move o robô ao longo do eixo y;
-     * @param dist distância a partir da posição atual no  eixo y que será movido o robô.
-     */
-    @Override
-    public void moveY(float dist){
-        if (Float.isNaN(dist) || Float.isFinite(dist)){
-        }
-        super.posicaoY += dist;
-    }
-    /**
-     * posY valor da posição Y inicial do robô.
-     * @param dist distância a partir da posiçaõ atual no eixo x que será movido o robô.
-     * @throws IllegalArgumentException exceção lançada quando o argumento for NaN ou infinito
-     */
-    @Override
-    public void moveX(float dist){
-        if (Float.isNaN(dist)|| Float.isInfinite(dist)){
-            throw new IllegalArgumentException("Arg não válido");
-        }
-        super.posicaoX += dist;
     }
     /**
      * Método que imprime a posição corrente do objeto.
