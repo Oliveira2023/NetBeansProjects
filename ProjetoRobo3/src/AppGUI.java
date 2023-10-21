@@ -51,9 +51,9 @@ public class AppGUI extends Application {
     
     private final ImageView viewFundo = new ImageView(imgFundo);
     private final ImageView viewRobo = new ImageView(imgRoboFrente);
-    private final ImageView viewBoxLvr[] = new ImageView[3];
-    private final ImageView viewBoxHd[][] = new ImageView[2][3];
-    private final ImageView viewBoxPrt[] = new ImageView[3];
+    private final ImageView viewBoxLvr[] = new ImageView[numCaixaLvr];
+    private final ImageView viewBoxHd[][] = new ImageView[numCaixaHdPrateleira][numCaixaHd];
+    private final ImageView viewBoxPrt[] = new ImageView[numCaixaPrt];
     
     
     private final Mundo2D mundo = new Mundo2D(600,400);
